@@ -3,11 +3,12 @@
 <p align="center">
   <a href="https://arxiv.org/abs/2508.06054"><img src="https://img.shields.io/badge/arXiv-2508.06054-b31b1b.svg" alt="arXiv"></a>
   <a href="https://ieeexplore.ieee.org/document/11591021"><img src="https://img.shields.io/badge/IEEE-GLOBECOM%20Wkshps%202025-00629B.svg" alt="IEEE"></a>
+  <a href="https://yeehengwang.github.io/MM-LSCM/"><img src="https://img.shields.io/badge/Project-Page-0e7c6b.svg" alt="Project"></a>
   <img src="https://img.shields.io/badge/PyTorch-1.11+-ee4c2c.svg" alt="PyTorch">
 </p>
 
 **Official code** for *[Multi-Modal Neural Radio Radiance Field for Localized Statistical Channel Modelling](https://arxiv.org/abs/2508.06054)*  
-([IEEE Xplore](https://ieeexplore.ieee.org/document/11591021) · [Project page](docs/index.html)).
+([IEEE Xplore](https://ieeexplore.ieee.org/document/11591021) · [Project page](https://yeehengwang.github.io/MM-LSCM/)).
 
 > Yiheng Wang, Shutao Zhang, Ye Xue, Tsung-Hui Chang  
 > Shenzhen Research Institute of Big Data / The Chinese University of Hong Kong, Shenzhen
@@ -17,17 +18,19 @@ MM-LSCM learns a neural radio radiance field from **RSRP + LiDAR**, recovers the
 
 <p align="center">
   <img src="assets/framework.png" width="92%" alt="MM-LSCM framework"/>
-  <br/>
-  <em>Rays from the BS query a dual-branch field; stop probability aligns channel APS \(\hat{\mathbf{x}}\) with obstacle depth \(\hat{z}\).</em>
+</p>
+
+<p align="center">
+  Rays from the BS query a dual-branch field; stop probability aligns channel APS $\hat{\mathbf{x}}$ with obstacle depth $\hat{z}$.
 </p>
 
 ---
 
 ## Highlights
 
-- **Self-supervised LSCM** — train with \(\hat{\mathbf{y}}_l=\boldsymbol{\Phi}\hat{\mathbf{x}}_l\); no ground-truth APS
+- **Self-supervised LSCM** — train with $\hat{\mathbf{y}}_l = \Phi \hat{\mathbf{x}}_l$; no ground-truth APS
 - **Multi-modal** — RSRP + LiDAR density; SM-LSCM ablation ships in the same repo
-- **Volume rendering** — shared stop probability \(\nu_n(t)\) for radio APS and geometry depth
+- **Volume rendering** — shared stop probability $\nu_n(t)$ for radio APS and geometry depth
 - **Stronger & more robust** — beats WNOMP / SM-LSCM on explored & unexplored grids, under noise
 
 | Method | Sub-Task 1 MAE ↓ | Sub-Task 2 MAE ↓ | Sub-Task 3 MAE ↓ |
@@ -42,21 +45,21 @@ Sub-Task 1: rotated RSRP @ explored · Sub-Task 2: RSRP @ unexplored · Sub-Task
 
 ## Method (short)
 
-Dual-branch field \(\mathcal{F}_\Theta:(\gamma(P^v),\gamma(\rho),\gamma(P_l^*),\omega)\to(\sigma,S)\).  
-Along each ray, stop weight \(\nu=\mathcal{T}\sigma\) renders:
+Dual-branch field $\mathcal{F}_\Theta:(\gamma(P^v),\gamma(\rho),\gamma(P_l^*),\omega)\rightarrow(\sigma,S)$.  
+Along each ray, stop weight $\nu=\mathcal{T}\sigma$ renders:
 
-\[
-\hat{r}_{l,n}=\!\int\nu_n(t)\,S_{l,n}(t)\,dt,\quad
-\hat{\mathbf{x}}_l=[|\hat{r}_{l,n}|^2]_n,\quad
-\hat{z}_n=\!\int\nu_n(t)\,t\,dt
-\]
+$$
+\hat{r}_{l,n}=\int \nu_n(t)\, S_{l,n}(t)\, dt,\quad
+\hat{\mathbf{x}}_l=\big[|\hat{r}_{l,n}|^2\big]_n,\quad
+\hat{z}_n=\int \nu_n(t)\, t\, dt
+$$
 
-\[
-\ell=\underbrace{\|\mathbf{y}-\boldsymbol{\Phi}\hat{\mathbf{x}}\|_2^2+\lambda_1\|\hat{\mathbf{x}}\|_1}_{\text{radio}}
-+\lambda_2\underbrace{\|z-\hat{z}\|_2^2}_{\text{env}}
-\]
+$$
+\ell=\|\mathbf{y}-\Phi\hat{\mathbf{x}}\|_2^2+\lambda_1\|\hat{\mathbf{x}}\|_1
++\lambda_2\|z-\hat{z}\|_2^2
+$$
 
-Full derivations → [arXiv:2508.06054](https://arxiv.org/abs/2508.06054).
+(radio reconstruction + APS sparsity + LiDAR depth). Full derivations → [arXiv:2508.06054](https://arxiv.org/abs/2508.06054).
 
 ---
 
