@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MM-LSCM — Multi-Modal Neural Radio Radiance Field</title>
+  <meta name="description" content="MM-LSCM: self-supervised multi-modal neural radio radiance fields for localized statistical channel modelling." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Newsreader:opsz,wght@6..72,500;6..72,600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --ink: #0c1a1f;
+      --muted: #5a6b73;
+      --paper: #f3f6f4;
+      --panel: #ffffff;
+      --line: #d5e0e3;
+      --accent: #0e7c6b;
+      --accent-deep: #085a4d;
+      --glow: #9fd9c8;
+      --warn: #c45c26;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: "Instrument Sans", system-ui, sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(1200px 600px at 10% -10%, rgba(14,124,107,.18), transparent 55%),
+        radial-gradient(900px 500px at 100% 0%, rgba(196,92,38,.10), transparent 50%),
+        linear-gradient(180deg, #e8f0ec 0%, var(--paper) 40%, #eef2f0 100%);
+      line-height: 1.55;
+    }
+    a { color: var(--accent-deep); text-underline-offset: 3px; }
+    .wrap { width: min(1080px, calc(100% - 2.5rem)); margin: 0 auto; }
+
+    /* Hero: one composition, brand first, full-bleed visual */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      min-height: 100svh;
+      display: grid;
+      align-items: end;
+      padding: 1.25rem 0 2.5rem;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(180deg, rgba(12,26,31,.15) 0%, rgba(12,26,31,.72) 100%),
+        url("../assets/framework.png") center / cover no-repeat;
+      z-index: 0;
+    }
+    .hero-inner {
+      position: relative;
+      z-index: 1;
+      color: #f7fbf9;
+      max-width: 42rem;
+      animation: rise .9s ease both;
+    }
+    @keyframes rise {
+      from { opacity: 0; transform: translateY(18px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .brand {
+      font-family: Newsreader, Georgia, serif;
+      font-size: clamp(3.2rem, 9vw, 5.6rem);
+      font-weight: 600;
+      letter-spacing: -.03em;
+      line-height: .95;
+      margin: 0 0 .75rem;
+      text-shadow: 0 8px 40px rgba(0,0,0,.35);
+    }
+    .hero h1 {
+      font-size: clamp(1.15rem, 2.4vw, 1.45rem);
+      font-weight: 500;
+      margin: 0 0 .85rem;
+      max-width: 34rem;
+      color: #e8f4ef;
+    }
+    .hero p {
+      margin: 0 0 1.4rem;
+      color: #c9ddd6;
+      font-size: 1.02rem;
+      max-width: 34rem;
+    }
+    .cta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .65rem;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: .4rem;
+      padding: .72rem 1.05rem;
+      border-radius: 999px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: .95rem;
+      border: 1px solid transparent;
+      transition: transform .2s ease, background .2s ease, border-color .2s ease;
+    }
+    .btn:hover { transform: translateY(-1px); }
+    .btn-primary { background: var(--accent); color: #fff; }
+    .btn-primary:hover { background: var(--accent-deep); }
+    .btn-ghost { background: rgba(255,255,255,.1); color: #fff; border-color: rgba(255,255,255,.28); backdrop-filter: blur(8px); }
+    .btn-ghost:hover { background: rgba(255,255,255,.18); }
+
+    section {
+      padding: 4.2rem 0 1rem;
+      animation: fade .8s ease both;
+      animation-range: entry 10% cover 30%;
+    }
+    @keyframes fade { from { opacity: 0; transform: translateY(10px);} to { opacity: 1; transform: none;} }
+    .eyebrow {
+      font-size: .78rem;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--accent);
+      font-weight: 600;
+      margin: 0 0 .55rem;
+    }
+    h2 {
+      font-family: Newsreader, Georgia, serif;
+      font-size: clamp(1.8rem, 3vw, 2.35rem);
+      font-weight: 600;
+      letter-spacing: -.02em;
+      margin: 0 0 .7rem;
+    }
+    .lead { color: var(--muted); max-width: 40rem; margin: 0 0 1.5rem; }
+
+    .authors {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .5rem .85rem;
+      margin: 0 0 1.25rem;
+      color: var(--muted);
+      font-size: .98rem;
+    }
+    .meta { color: var(--muted); font-size: .92rem; margin-bottom: 1.5rem; }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+    }
+    @media (max-width: 800px) { .grid-3 { grid-template-columns: 1fr; } }
+    .point {
+      padding: 1.15rem 1.2rem 1.25rem;
+      border-top: 2px solid var(--accent);
+      background: linear-gradient(180deg, rgba(14,124,107,.06), transparent 70%);
+    }
+    .point strong { display: block; margin-bottom: .35rem; font-size: 1.02rem; }
+    .point p { margin: 0; color: var(--muted); font-size: .95rem; }
+
+    .figure {
+      margin: 0;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      background: var(--panel);
+      box-shadow: 0 18px 50px rgba(12,26,31,.08);
+    }
+    .figure img { display: block; width: 100%; height: auto; }
+    .figure figcaption {
+      padding: .85rem 1rem 1rem;
+      color: var(--muted);
+      font-size: .9rem;
+      border-top: 1px solid var(--line);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      overflow: hidden;
+      font-variant-numeric: tabular-nums;
+    }
+    th, td { padding: .85rem 1rem; text-align: left; border-bottom: 1px solid var(--line); }
+    th { background: #e7efec; font-size: .85rem; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); }
+    tr:last-child td { border-bottom: 0; }
+    tr.best td { background: rgba(14,124,107,.08); font-weight: 600; }
+
+    .bib {
+      background: #122226;
+      color: #d7ebe4;
+      padding: 1.1rem 1.2rem;
+      border-radius: 12px;
+      overflow-x: auto;
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-size: .82rem;
+      line-height: 1.45;
+      white-space: pre;
+      position: relative;
+    }
+    .copy {
+      position: absolute;
+      top: .7rem;
+      right: .7rem;
+      border: 1px solid rgba(255,255,255,.2);
+      background: rgba(255,255,255,.08);
+      color: #fff;
+      border-radius: 999px;
+      padding: .35rem .7rem;
+      font-family: "Instrument Sans", sans-serif;
+      font-size: .78rem;
+      cursor: pointer;
+    }
+
+    footer {
+      margin-top: 4rem;
+      padding: 2rem 0 3rem;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: .9rem;
+    }
+  </style>
+</head>
+<body>
+  <header class="hero">
+    <div class="wrap hero-inner">
+      <p class="brand">MM-LSCM</p>
+      <h1>Multi-Modal Neural Radio Radiance Field for Localized Statistical Channel Modelling</h1>
+      <p>Self-supervised volume rendering that fuses beam-wise RSRP with LiDAR—recover APS without labels, and align radio paths with real obstacles.</p>
+      <div class="cta">
+        <a class="btn btn-primary" href="https://arxiv.org/abs/2508.06054">Paper (arXiv)</a>
+        <a class="btn btn-ghost" href="https://ieeexplore.ieee.org/document/11591021">IEEE Xplore</a>
+        <a class="btn btn-ghost" href="https://github.com/" id="code-link">Code</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section>
+      <div class="wrap">
+        <p class="eyebrow">Authors</p>
+        <h2>Who built it</h2>
+        <div class="authors">
+          <span>Yiheng Wang</span>
+          <span>Shutao Zhang</span>
+          <span>Ye Xue</span>
+          <span>Tsung-Hui Chang</span>
+        </div>
+        <p class="meta">Shenzhen Research Institute of Big Data / The Chinese University of Hong Kong, Shenzhen · IEEE Globecom Workshops 2025</p>
+      </div>
+    </section>
+
+    <section>
+      <div class="wrap">
+        <p class="eyebrow">Why</p>
+        <h2>RSRP alone is blind to geometry</h2>
+        <p class="lead">Classical LSCM lacks environmental priors. Pure neural radio fields often need labeled APS and ignore scene structure. MM-LSCM closes both gaps with a dual-branch neural radio radiance field.</p>
+        <div class="grid-3">
+          <div class="point">
+            <strong>Self-supervised radio loss</strong>
+            <p>Train with ŷ = Φ x̂ from beam RSRP—no ground-truth APS required.</p>
+          </div>
+          <div class="point">
+            <strong>LiDAR as a second modality</strong>
+            <p>Voxel density guides hitting probability and depth supervision.</p>
+          </div>
+          <div class="point">
+            <strong>Shared stop probability</strong>
+            <p>One coherence weight renders channel APS and obstacle depth together.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="wrap">
+        <p class="eyebrow">Method</p>
+        <h2>Volume-rendering multi-modal synthesis</h2>
+        <p class="lead">Rays leave the BS; each sample queries F<sub>Θ</sub> for density σ and direction-dependent signal S. Stop weights synthesize APS x̂ and depth ẑ.</p>
+        <figure class="figure">
+          <img src="../assets/framework.png" alt="MM-LSCM volume rendering framework" />
+          <figcaption>Framework: voxel position, point-cloud density, target grid, and ray direction map to radio and geometry properties.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section>
+      <div class="wrap">
+        <p class="eyebrow">Results</p>
+        <h2>Lower error, stronger robustness</h2>
+        <p class="lead">Indoor laboratory setting. MAE in dB; lower is better.</p>
+        <table>
+          <thead>
+            <tr>
+              <th>Method</th>
+              <th>Sub-Task 1</th>
+              <th>Sub-Task 2</th>
+              <th>Sub-Task 3</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="best">
+              <td>MM-LSCM</td>
+              <td>0.87</td>
+              <td>0.56</td>
+              <td>0.90</td>
+            </tr>
+            <tr>
+              <td>SM-LSCM</td>
+              <td>1.09</td>
+              <td>0.70</td>
+              <td>1.10</td>
+            </tr>
+            <tr>
+              <td>WNOMP</td>
+              <td>1.85</td>
+              <td>—</td>
+              <td>—</td>
+            </tr>
+          </tbody>
+        </table>
+        <p class="lead" style="margin-top:1rem">Sub-Task 1: rotated RSRP @ explored · Sub-Task 2: RSRP @ unexplored · Sub-Task 3: rotated RSRP @ unexplored.</p>
+      </div>
+    </section>
+
+    <section>
+      <div class="wrap">
+        <p class="eyebrow">Cite</p>
+        <h2>BibTeX</h2>
+        <div style="position:relative">
+          <button class="copy" type="button" onclick="copyBib()">Copy</button>
+          <pre class="bib" id="bib">@inproceedings{wang2025multi,
+  title={Multi-modal neural radio radiance field for localized statistical channel modelling},
+  author={Wang, Yiheng and Zhang, Shutao and Xue, Ye and Chang, Tsung-Hui},
+  booktitle={2025 IEEE Globecom Workshops (GC Wkshps)},
+  pages={1005--1010},
+  year={2025},
+  organization={IEEE}
+}</pre>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      Supported by National Key R&amp;D Program of China (2023YFB2904804), NSFC 62301334, and Guangdong Major Project (2023B0303000001).
+      Thanks to NeRF² for paving the path.
+    </div>
+  </footer>
+
+  <script>
+    function copyBib() {
+      const t = document.getElementById('bib').innerText;
+      navigator.clipboard.writeText(t).then(() => {
+        const b = document.querySelector('.copy');
+        b.textContent = 'Copied';
+        setTimeout(() => b.textContent = 'Copy', 1200);
+      });
+    }
+    // If hosted on GitHub Pages, point Code to the repo root
+    (function () {
+      const host = location.hostname;
+      const m = host.match(/^([^.]+)\.github\.io$/);
+      if (m) {
+        const user = m[1];
+        const repo = location.pathname.split('/').filter(Boolean)[0] || 'MM-LSCM';
+        document.getElementById('code-link').href = 'https://github.com/' + user + '/' + repo;
+      }
+    })();
+  </script>
+</body>
+</html>

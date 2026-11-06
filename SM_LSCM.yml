@@ -1,0 +1,45 @@
+
+### Path settings
+path:
+  expname: SM_LSCM
+  datadir: ./data
+  logdir: ./SM_LSCM/log
+
+
+### rendering settings
+render:
+  mode: 'rsrp'
+  near: 0
+  # far: 5
+  far: 1
+  n_samples: 96
+  # scale_worldsize: 2850
+  # scale_worldsize: 2850 # 60m x 60m, normalize the coordinates to [0, 1]
+  scale_worldsize: 300
+
+# 5e-5
+### training settings
+train:
+  lr: 1e-4
+  weight_decay: 5e-4
+  T_max: 10000
+  eta_min: 1e-6
+  batch_size: 48
+  total_iterations: 30000
+  load_ckpt: True
+
+  save_freq: 100
+  val_freq: 2500
+  report_freq: 100
+
+
+### network settings
+networks:
+  D: 8
+  W: 256
+  skips: [4]
+  multires:  {'pts':10, 'view':10, 'tx':10,'pc':30}
+  input_dims: {'pts':3, 'view':3, 'tx':3,'pc':1}
+  is_embeded: {'pts':True, 'view':True, 'tx':True,'pc':True}
+
+
