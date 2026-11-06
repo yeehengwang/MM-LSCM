@@ -51,7 +51,7 @@
       inset: 0;
       background:
         linear-gradient(180deg, rgba(12,26,31,.15) 0%, rgba(12,26,31,.72) 100%),
-        url("../assets/framework.png") center / cover no-repeat;
+        url("assets/framework.png") center / cover no-repeat;
       z-index: 0;
     }
     .hero-inner {
@@ -231,7 +231,7 @@
       <div class="cta">
         <a class="btn btn-primary" href="https://arxiv.org/abs/2508.06054">Paper (arXiv)</a>
         <a class="btn btn-ghost" href="https://ieeexplore.ieee.org/document/11591021">IEEE Xplore</a>
-        <a class="btn btn-ghost" href="https://github.com/" id="code-link">Code</a>
+        <a class="btn btn-ghost" href="https://github.com/yeehengwang/MM-LSCM" id="code-link">Code</a>
       </div>
     </div>
   </header>
@@ -242,10 +242,10 @@
         <p class="eyebrow">Authors</p>
         <h2>Who built it</h2>
         <div class="authors">
-          <span>Yiheng Wang</span>
+          <a href="https://yeehengwang.github.io/">Yiheng Wang</a>
           <span>Shutao Zhang</span>
-          <span>Ye Xue</span>
-          <span>Tsung-Hui Chang</span>
+          <a href="https://yokoxue.github.io/">Ye Xue</a>
+          <a href="https://myweb.cuhk.edu.cn/changtsunghui/Home">Tsung-Hui Chang</a>
         </div>
         <p class="meta">Shenzhen Research Institute of Big Data / The Chinese University of Hong Kong, Shenzhen · IEEE Globecom Workshops 2025</p>
       </div>
@@ -279,7 +279,7 @@
         <h2>Volume-rendering multi-modal synthesis</h2>
         <p class="lead">Rays leave the BS; each sample queries F<sub>Θ</sub> for density σ and direction-dependent signal S. Stop weights synthesize APS x̂ and depth ẑ.</p>
         <figure class="figure">
-          <img src="../assets/framework.png" alt="MM-LSCM volume rendering framework" />
+          <img src="assets/framework.png" alt="MM-LSCM volume rendering framework" />
           <figcaption>Framework: voxel position, point-cloud density, target grid, and ray direction map to radio and geometry properties.</figcaption>
         </figure>
       </div>
@@ -359,16 +359,6 @@
         setTimeout(() => b.textContent = 'Copy', 1200);
       });
     }
-    // If hosted on GitHub Pages, point Code to the repo root
-    (function () {
-      const host = location.hostname;
-      const m = host.match(/^([^.]+)\.github\.io$/);
-      if (m) {
-        const user = m[1];
-        const repo = location.pathname.split('/').filter(Boolean)[0] || 'MM-LSCM';
-        document.getElementById('code-link').href = 'https://github.com/' + user + '/' + repo;
-      }
-    })();
   </script>
 </body>
 </html>

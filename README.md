@@ -10,7 +10,7 @@
 **Official code** for *[Multi-Modal Neural Radio Radiance Field for Localized Statistical Channel Modelling](https://arxiv.org/abs/2508.06054)*  
 ([IEEE Xplore](https://ieeexplore.ieee.org/document/11591021) · [Project page](https://yeehengwang.github.io/MM-LSCM/)).
 
-> Yiheng Wang, Shutao Zhang, Ye Xue, Tsung-Hui Chang  
+> [Yiheng Wang](https://yeehengwang.github.io/), Shutao Zhang, [Ye Xue](https://yokoxue.github.io/) and [Tsung-Hui Chang](https://myweb.cuhk.edu.cn/changtsunghui/Home)  
 > Shenzhen Research Institute of Big Data / The Chinese University of Hong Kong, Shenzhen
 
 **Drive-test RSRP alone cannot see the environment—and labeled APS is expensive.**  
