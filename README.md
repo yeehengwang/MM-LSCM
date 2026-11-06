@@ -7,6 +7,14 @@
   <img src="https://img.shields.io/badge/PyTorch-1.11+-ee4c2c.svg" alt="PyTorch">
 </p>
 
+<p align="center">
+  <img src="https://img.shields.io/badge/NeRF-radio-0e7c6b" alt="NeRF">
+  <img src="https://img.shields.io/badge/LSCM-channel%20modeling-00629B" alt="LSCM">
+  <img src="https://img.shields.io/badge/multi--modal-RSRP%20%2B%20LiDAR-c45c26" alt="multimodal">
+  <img src="https://img.shields.io/badge/self--supervised-APS-5a6b73" alt="self-supervised">
+  <img src="https://img.shields.io/badge/topics-wireless%20%7C%20NeRF%20%7C%20digital%20twin-informational" alt="topics">
+</p>
+
 **Official code** for *[Multi-Modal Neural Radio Radiance Field for Localized Statistical Channel Modelling](https://arxiv.org/abs/2508.06054)*  
 ([IEEE Xplore](https://ieeexplore.ieee.org/document/11591021) · [Project page](https://yeehengwang.github.io/MM-LSCM/)).
 
@@ -142,6 +150,10 @@ Preprint: [arXiv:2508.06054](https://arxiv.org/abs/2508.06054) · IEEE: [documen
 
 Supported by the National Key R&D Program of China (2023YFB2904804), NSFC 62301334, and the Guangdong Major Project of Basic and Applied Basic Research (2023B0303000001).  
 Thanks to NeRF² for paving the path.
+
+## Keywords
+
+`NeRF` · `neural radiance field` · `wireless communications` · `channel modeling` · `LSCM` · `APS` · `RSRP` · `LiDAR` · `multi-modal` · `self-supervised learning` · `volume rendering` · `radio propagation` · `digital twin` · `PyTorch` · `GLOBECOM`
 
 ## Contact
 
